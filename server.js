@@ -35,6 +35,15 @@ app.get('/article/list', function(request, response) {
     return response.status(200).json({articles: article});
 })
 
+article.push({title:"Test article 1", content:"content 1"});
+article.push({title:"Test article 2", content:"content 2"});
+
+app.get('/article/:articleID', function(request, response){
+  response.render('../article.ejs', {
+    article: article[request.params.articleID]
+  })
+});
+
 // var fs = require('fs');
 
 // var server = http.createServer(function(req, res){
