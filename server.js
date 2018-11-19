@@ -4,6 +4,31 @@ var app = express();
 var server = http.Server(app);
 var bodyParser = require('body-parser');
 
+//Connecting MongoDB
+var mongo = require('mongodb');
+
+//for c9: where mongodb is running
+var db; //contains database value after successful connection
+var db_url = "mongodb://" + process.env.IP + ":27017"
+mongo.MongoClient.connect(db_url, {useNewUrlParser:true}, function(err, client){
+  if(err){
+    console.log('Could not connect to MongoDB');
+  }
+  else{
+    db = client.db('node-cw9');
+  }
+})
+
+//Save function takes any data from user and saves it to mongodb
+var save = function(form_data){
+  db.createCollection('articles', function(err,collection){
+    
+  });
+  var collection = db.collection('articles');
+  collection.save(form_data);
+}
+
+
 //configuring app with bodyParser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -27,7 +52,8 @@ app.post('/article/create', function(request, response){
   if(!request.body.title){
     return response.status(400).json({error: "Please add a title"});
   }
-  article.push(request.body);
+  //article.push(request.body);
+  save(request.body)
   return response.status(200).json({message: "Article successfully created"});
 });
 
@@ -43,6 +69,7 @@ app.get('/article/:articleID', function(request, response){
     article: article[request.params.articleID]
   })
 });
+
 
 // var fs = require('fs');
 
