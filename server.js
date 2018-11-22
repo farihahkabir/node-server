@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = http.Server(app);
 var bodyParser = require('body-parser');
-
+//var Article = require('./models/Article.js');
 //Connecting MongoDB
 //var mongo = require('mongodb');
 
@@ -31,21 +31,20 @@ mongoose.connection.on('error', function(){
 });
 
 //define schema
-var Schema = mongoose.Schema;
+// var Schema = mongoose.Schema;
 
-var articleSchema = new Schema({
-  title: {
-    type: String,
-    required: "Title required"
-  },
-  content: {
-    type: String
-  }
-});
+// var articleSchema = new Schema({
+//   title: {
+//     type: String,
+//     required: "Title required"
+//   },
+//   content: {
+//     type: String
+//   }
+// });
 
-//declare a model to call query fields on it
-var Article = mongoose.model('Article', articleSchema);
-
+// //declare a model to call query fields on it
+// var Article = mongoose.model('Article', articleSchema);
 
 
 //Save function takes any data from user and saves it to mongodb
@@ -63,50 +62,57 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.get('/', function(request, response){
-  response.sendFile(__dirname+'/index.html');
+  response.render('index.ejs');
 });
 
 app.get('/about-page', function(request, response){
-  response.sendFile(__dirname+'/about.html');
+  response.render('about.ejs');
 });
 
-app.get('/new-article', function(request, response){
-  response.sendFile(__dirname+'/form.html');
+require('./routes/article-routes.js')(app);
+
+server.listen(process.env.PORT || 3000, process.env.IP, function(){ //c9 has predefined port (process.env.PORT) but if you use a local host, port 3000
+  console.log('Server running');
 });
 
-var article = [];
 
-app.post('/article/create', function(request, response){
-  var new_article = new Article(request.body);
-  new_article.save(function(err,data){
-    if(err){
-      return response.status(400).json({error: "Please add a title"});
-      console.log(data);
-    }
-    return response.status(200).json({message: "Article successfully created"});
-  })
+// app.get('/new-article', function(request, response){
+//   response.sendFile(__dirname+'/views/form.html');
+// });
+
+// var article = [];
+
+// app.post('/article/create', function(request, response){
+//   var new_article = new Article(request.body);
+//   new_article.save(function(err,data){
+//     if(err){
+//       return response.status(400).json({error: "Please add a title"});
+//       console.log(data);
+//     }
+//     return response.status(200).json({message: "Article successfully created"});
+//   })
   
-  console.log(request.body);//when you get a request you need to send back a response to client
-  // if(!request.body.title){
-  //   return response.status(400).json({error: "Please add a title"});
-  // }
-  //article.push(request.body);
-  //save(request.body) //stores new item in form to mongodb
-  // return response.status(200).json({message: "Article successfully created"});
-});
+//   console.log(request.body);//when you get a request you need to send back a response to client
+//   // if(!request.body.title){
+//   //   return response.status(400).json({error: "Please add a title"});
+//   // }
+//   //article.push(request.body);
+//   //save(request.body) //stores new item in form to mongodb
+//   // return response.status(200).json({message: "Article successfully created"});
+// });
 
-app.get('/article/list', function(request, response) {
-    return response.status(200).json({articles: article});
-})
+// app.get('/article/list', function(request, response) {
+//     return response.status(200).json({articles: article});
+// })
 
-article.push({title:"Test article 1", content:"content 1"});
-article.push({title:"Test article 2", content:"content 2"});
+// article.push({title:"Test article 1", content:"content 1"});
+// article.push({title:"Test article 2", content:"content 2"});
 
-app.get('/article/:articleID', function(request, response){
-  response.render('../article.ejs', {
-    article: article[request.params.articleID]
-  })
-});
+// app.get('/article/:articleID', function(request, response){
+//   response.render('../article.ejs', {
+//     article: article[request.params.articleID]
+//   })
+// });
 
 
 // var fs = require('fs');
@@ -123,6 +129,3 @@ app.get('/article/:articleID', function(request, response){
 //   //res.end("Hello World\n");
 // });
 
-server.listen(process.env.PORT || 3000, process.env.IP, function(){ //c9 has predefined port (process.env.PORT) but if you use a local host, port 3000
-  console.log('Server running');
-});
