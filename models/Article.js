@@ -9,6 +9,10 @@ var articleSchema = new Schema({
   },
   content: {
     type: String
+  },
+  reading_time: {
+    type: Number,
+    required: "Reading length required"
   }
 });
 

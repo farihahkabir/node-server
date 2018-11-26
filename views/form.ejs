@@ -7,6 +7,7 @@
     <body>
         <h1>New Article</h1>
         <input type="text" id="title" placeholder="Title"><br/><br/>
+        <input type="number" id="reading_time" min= “1” placeholder="Reading Time" required><br/><br/>
         <textarea id="content" placeholder="Content"></textarea><br/>
         <button id="submit">Submit</button>
         <button id="getArticles">Get Articles</button>
@@ -18,11 +19,12 @@
         </script>
         
         <script>
-            var article = {title:"", content:""};
+            var article = {title:"", content:"", reading_time:""};
             
             $('#submit').click(function(event){
                 article.title = $('#title').val();
                 article.content = $('#content').val();
+                article.reading_time = $('#reading_time').val();
                 $.ajax({
                     method: "POST",
                     url: "/article/create",
