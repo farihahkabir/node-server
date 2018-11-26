@@ -48,13 +48,13 @@ mongoose.connection.on('error', function(){
 
 
 //Save function takes any data from user and saves it to mongodb
-var save = function(form_data){
-  db.createCollection('articles', function(err,collection){
+// var save = function(form_data){
+//   db.createCollection('articles', function(err,collection){
     
-  });
-  var collection = db.collection('articles');
-  collection.save(form_data);
-}
+//   });
+//   var collection = db.collection('articles');
+//   collection.save(form_data);
+// }
 
 
 //configuring app with bodyParser

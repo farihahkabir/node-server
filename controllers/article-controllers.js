@@ -1,3 +1,5 @@
+var Article = require('./../models/Article.js');
+
 module.exports.new = function(request, response){
     response.render('form.ejs');
 }
@@ -19,4 +21,35 @@ module.exports.create =  function(request, response){
   //article.push(request.body);
   //save(request.body) //stores new item in form to mongodb
   // return response.status(200).json({message: "Article successfully created"});
+}
+
+module.exports.list = function(request, response) {
+  Article.find(function(err, data){
+    if(err){
+      response.status(400)
+        .json({
+          error: "Database query error"
+        });
+    }
+  
+    response.status(200).json({
+      articles: data
+    });
+  });
+}
+
+module.exports.articleID = function(request, response) {
+  Article.findOne({_id:request.params.articleID},
+    function(err, data){
+      if(err){
+        response.status(400)
+          .json({
+            error: "Database query error"
+          });
+      }else{
+      response.render('article.ejs', {
+        article: data
+      })
+    }
+  });
 }
