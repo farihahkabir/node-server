@@ -49,9 +49,9 @@ module.exports.articleID = function(request, response) {
             error: "Database query error"
           });
       }else{
-      response.render('article.ejs', {
-        article: data
-      })
-    }
+        response.render('article.ejs', {
+          article: data
+        })
+      }
   });
 }

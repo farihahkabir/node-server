@@ -69,6 +69,7 @@ app.get('/about-page', function(request, response){
   response.render('about.ejs');
 });
 
+//bring in  article routes
 require('./routes/article-routes.js')(app);
 
 server.listen(process.env.PORT || 3000, process.env.IP, function(){ //c9 has predefined port (process.env.PORT) but if you use a local host, port 3000
